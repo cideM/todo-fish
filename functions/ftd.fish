@@ -4,14 +4,13 @@ function ftd -d "Parse and display a list of todo.txt files"
     argparse $options -- $argv
 
     if test -n "$_flag_h"
-      echo "USAGE"
-      return 0
+        echo "USAGE"
+        return 0
     end
 
     read -laz paths
 
     for p in $paths
-        echo (dirname $p)
 
         # Iterate over lines and put in 3 buckets:
         # done
@@ -33,6 +32,13 @@ function ftd -d "Parse and display a list of todo.txt files"
             end
         end
 
+        if test -n "$_flag_v"
+            printf "%s (%u/%u)" (dirname $p) (count $done) (wc -l < $p)
+            printf "\n"
+        else
+            echo (dirname $p)
+        end
+
         for l in (string join \n $not_done_with_prio | sort)
             printf "\t[ ] %s\n" $l
         end
@@ -41,13 +47,10 @@ function ftd -d "Parse and display a list of todo.txt files"
             printf "\t[ ] %s\n" $l
         end
 
-        if test -n "$_flag_v"
-          for l in $done
-              printf "\t[x] %s\n" $l
-          end
-          printf "\t %u/%u" (count $done) (wc -l < $p)
-          printf "\n"
+        for l in $done
+            printf "\t[x] %s\n" $l
         end
+
 
         printf "\n"
     end
