@@ -32,28 +32,38 @@ function ftd -d "Parse and display a list of todo.txt files"
             end
         end
 
+        set -l todos (wc -l < $p)
+        set -l skip_entry 0
+
         if test -n "$_flag_v"
-            printf "%s (%u/%u)" (dirname $p) (count $done) (wc -l < $p)
+            set_color --underline
+            printf "%-40s (%u/%u)" (dirname $p) (count $done) $todos
+            set_color normal
             printf "\n"
-        else
+        else if test $todos -gt 0
+            set_color --underline
             echo (dirname $p)
+            set_color normal
+        else
+            set skip_entry 1
         end
 
         for l in (string join \n $not_done_with_prio | sort)
-            printf "\t[ ] %s\n" $l
+            printf "  [ ] %s\n" $l
         end
 
         for l in $not_done_no_prio
-            printf "\t[ ] %s\n" $l
+            printf "  [ ] %s\n" $l
         end
 
         if test -n "$_flag_v"
             for l in $done
-                printf "\t[x] %s\n" $l
+                printf "  [x] %s\n" $l
             end
         end
 
-
-        printf "\n"
+        if test "$skip_entry" -ne 1
+          printf "\n"
+        end
     end
 end
