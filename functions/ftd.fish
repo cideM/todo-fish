@@ -47,8 +47,10 @@ function ftd -d "Parse and display a list of todo.txt files"
             printf "\t[ ] %s\n" $l
         end
 
-        for l in $done
-            printf "\t[x] %s\n" $l
+        if test -n "$_flag_v"
+            for l in $done
+                printf "\t[x] %s\n" $l
+            end
         end
 
 
