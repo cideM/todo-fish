@@ -1,5 +1,0 @@
-Create README +readme
-Add rg example +readme
-Add ag example +readme
-Add fzf example +readme
-Add find example +readme
