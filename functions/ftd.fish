@@ -8,7 +8,13 @@ function ftd -d "Parse and display a list of todo.txt files"
         return 0
     end
 
-    read -laz paths
+    set -l paths
+
+    if count $argv >/dev/null
+        set paths $argv
+    else
+        read -az paths
+    end
 
     for p in $paths
 
