@@ -13,9 +13,9 @@ function ftd -d "Parse and display a list of todo.txt files"
     for p in $paths
 
         # Iterate over lines and put in 3 buckets:
-        # done
-        # not done with prio
-        # not done without prio
+        # - done
+        # - not done with prio
+        # - not done without prio
         # Sort the not done with prio bucket and then
         # just concat all 3 buckets together
         set -l done
@@ -23,6 +23,10 @@ function ftd -d "Parse and display a list of todo.txt files"
         set -l not_done_no_prio
 
         for l in (cat $p)
+            if test -z (string trim "$l")
+                continue
+            end
+
             if test (string match -r "^x\s+" $l)
                 set -a done $l
             else if test (string match -r "\([A-Z]\)" $l)
@@ -63,7 +67,7 @@ function ftd -d "Parse and display a list of todo.txt files"
         end
 
         if test "$skip_entry" -ne 1
-          printf "\n"
+            printf "\n"
         end
     end
 end
