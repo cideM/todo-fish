@@ -1,6 +1,5 @@
 function ftd -d "Parse and display a list of todo.txt files"
     set -l options (fish_opt -s v -l verbose) (fish_opt -s h -l help)
-    set options $options
     argparse $options -- $argv
 
     if test -n "$_flag_h"
@@ -10,6 +9,7 @@ function ftd -d "Parse and display a list of todo.txt files"
 
     set -l paths
 
+    # Read either from file(s) or from STDIN
     if count $argv >/dev/null
         set paths $argv
     else
@@ -45,11 +45,13 @@ function ftd -d "Parse and display a list of todo.txt files"
         set -l todos (wc -l < $p)
         set -l skip_entry 0
 
+	# When verbose flag is true, print additional info about progress
         if test -n "$_flag_v"
             set_color --underline
             printf "%-40s (%u/%u)" (dirname $p) (count $done) $todos
             set_color normal
             printf "\n"
+        # Without verbose flag, skip empty todo lists
         else if test $todos -gt 0
             set_color --underline
             echo (dirname $p)
@@ -66,12 +68,18 @@ function ftd -d "Parse and display a list of todo.txt files"
             printf "  [ ] %s\n" $l
         end
 
+	# Print done todos in verbose output
         if test -n "$_flag_v"
             for l in $done
                 printf "  [x] %s\n" $l
             end
         end
 
+	# If a todo is empty and no verbose flag is passed,
+	# we need to skip the final newline. Otherwise the
+	# program prints a double empty newline. One from
+	# the last todo file that actually had entries,
+	# and one from the empty todo that wasn't printed.
         if test "$skip_entry" -ne 1
             printf "\n"
         end
