@@ -5,7 +5,7 @@ Super minimal `todo.txt` pretty-printer.
 ## Quickstart
 
 ```fish
-fisher add cideM/todo-fish
+fisher install cideM/todo-fish
 ```
 
 ```fish
