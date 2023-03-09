@@ -30,7 +30,7 @@ $ echo todo.txt | ftd -v
 Install with [Fisher](https://github.com/jorgebucaran/fisher) (recommended):
 
 ```shell
-fisher add cideM/todo-fish
+fisher install cideM/todo-fish
 ```
 
 ### Manual
